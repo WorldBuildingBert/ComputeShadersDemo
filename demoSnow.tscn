@@ -1,0 +1,49 @@
+[gd_scene load_steps=9 format=3 uid="uid://du4ogm6jn6kms"]
+
+[ext_resource type="Script" uid="uid://bmtf8qp8yvee4" path="res://bean3d.gd" id="1_23e2c"]
+[ext_resource type="Shader" uid="uid://pn8fk5b0po4r" path="res://snow3d.gdshader" id="2_12fv3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e7vl3"]
+render_priority = 0
+shader = ExtResource("2_12fv3")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wcuis"]
+subdivide_width = 512
+subdivide_depth = 512
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vf330"]
+sky_top_color = Color(0.563736, 0.864477, 0.768103, 1)
+ground_bottom_color = Color(0.28163, 0.241179, 0.194228, 1)
+ground_energy_multiplier = 1.5
+
+[sub_resource type="Sky" id="Sky_l7ohd"]
+sky_material = SubResource("ProceduralSkyMaterial_vf330")
+
+[sub_resource type="Environment" id="Environment_pboeg"]
+background_mode = 2
+sky = SubResource("Sky_l7ohd")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_l7ohd"]
+radius = 0.08
+height = 0.5
+
+[node name="test" type="Node3D"]
+script = ExtResource("1_23e2c")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("ShaderMaterial_e7vl3")
+mesh = SubResource("PlaneMesh_wcuis")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.840084, 0.542457, 0, -0.542457, 0.840084, 0, 1.06309, 1.57686)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_pboeg")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.892971, -0.258979, 0.368148, 0, 0.817899, 0.575362, -0.450114, -0.513782, 0.73036, 1.18745, 0.688582, 1.87007)
+shadow_enabled = true
+
+[node name="bean" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.275, 0, 0)
+mesh = SubResource("CapsuleMesh_l7ohd")

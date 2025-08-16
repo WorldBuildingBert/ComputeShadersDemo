@@ -1,0 +1,78 @@
+[gd_scene load_steps=15 format=3 uid="uid://b7drr0jbcclpw"]
+
+[ext_resource type="Script" uid="uid://brqsl41r7koo8" path="res://fpsCamera.gd" id="1_bfrbw"]
+[ext_resource type="Script" uid="uid://ddriosuult7k7" path="res://demo_shooter.gd" id="1_r3slc"]
+[ext_resource type="Shader" uid="uid://co0tl8c8aaqtv" path="res://boxshader.gdshader" id="3_3is82"]
+
+[sub_resource type="Gradient" id="Gradient_u5jdq"]
+colors = PackedColorArray(0, 0.321569, 0, 1, 0.308853, 0.596682, 0.414773, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ffqd0"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yvqga"]
+color_ramp = SubResource("Gradient_u5jdq")
+noise = SubResource("FastNoiseLite_ffqd0")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wj5q4"]
+albedo_texture = SubResource("NoiseTexture2D_yvqga")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ffqd0"]
+material = SubResource("StandardMaterial3D_wj5q4")
+size = Vector2(15, 15)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_84gsl"]
+render_priority = 0
+shader = ExtResource("3_3is82")
+
+[sub_resource type="BoxMesh" id="BoxMesh_yvqga"]
+size = Vector3(4, 4, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r3slc"]
+size = Vector3(4, 4, 4)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_u5jdq"]
+sky_top_color = Color(0.563736, 0.864477, 0.768103, 1)
+ground_bottom_color = Color(0.28163, 0.241179, 0.194228, 1)
+ground_energy_multiplier = 1.5
+
+[sub_resource type="Sky" id="Sky_wcuis"]
+sky_material = SubResource("ProceduralSkyMaterial_u5jdq")
+
+[sub_resource type="Environment" id="Environment_ffqd0"]
+background_mode = 2
+sky = SubResource("Sky_wcuis")
+
+[node name="shooterdemo" type="Node3D"]
+script = ExtResource("1_r3slc")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0631039, 7.26579)
+script = ExtResource("1_bfrbw")
+
+[node name="floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.669266, 0)
+mesh = SubResource("PlaneMesh_ffqd0")
+
+[node name="box" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.610933, 0)
+material_override = SubResource("ShaderMaterial_84gsl")
+mesh = SubResource("BoxMesh_yvqga")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="box"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="box/StaticBody3D"]
+shape = SubResource("BoxShape3D_r3slc")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ffqd0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.210096, -0.562521, 0.799644, 1.16842e-08, 0.817899, 0.575362, -0.97768, 0.120882, -0.171838, 1.18745, 0.688582, 1.87007)
+shadow_enabled = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="how to get out" type="Label" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Press backspace to free the mouse"
